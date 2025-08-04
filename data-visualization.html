@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Zimmer - Interactive Data Visualization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-navy: #2c3e50;
+            --primary-blue: #3498db;
+            --data-orange: #e67e22;
+            --data-purple: #34495e;
+            --data-green: #27ae60;
+            --data-pink: #16a085;
+            --data-yellow: #f39c12;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a202c 50%, #2d3748 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .gradient-border {
+            background: linear-gradient(45deg, var(--data-purple), var(--data-pink), var(--data-orange));
+            padding: 2px;
+            border-radius: 1rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .metric-card {
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        .data-point {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .data-point:hover {
+            transform: scale(1.2);
+        }
+        
+        .pulse-dot {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .data-stream {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stream-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+            animation: dataFlow 3s linear infinite;
+        }
+        
+        @keyframes dataFlow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tooltip.visible {
+            opacity: 1;
+        }
+        
+        .loading-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--data-purple), var(--data-pink));
+            border-radius: 2px;
+            animation: loading 2s ease-in-out infinite;
+        }
+        
+        @keyframes loading {
+            0%, 100% { transform: scaleX(0.3); }
+            50% { transform: scaleX(1); }
+        }
+        
+        .filter-chip {
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid var(--data-purple);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+        
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: var(--data-purple);
+            color: white;
+        }
+        
+        .chart-legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        
+        .real-time-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--data-green);
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--data-green);
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .export-btn {
+            background: linear-gradient(45deg, var(--data-purple), var(--data-pink));
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .heatmap-cell {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .heatmap-cell:hover {
+            stroke: white;
+            stroke-width: 2;
+        }
+        
+        .axis-label {
+            font-size: 12px;
+            fill: #94a3b8;
+        }
+        
+        .grid-line {
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-dasharray: 2,2;
+        }
+        
+        .data-table {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .data-table::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .data-table::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+        
+        .data-table::-webkit-scrollbar-thumb {
+            background: var(--data-purple);
+            border-radius: 2px;
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--data-purple);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px);">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="demo.html" class="text-2xl font-bold text-white hover:text-blue-300 transition-colors">
+                    ← Alex Zimmer
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <span class="text-white font-medium">📊 Data Visualization</span>
+                    <div class="real-time-indicator">
+                        <div class="live-dot"></div>
+                        <span>Live Data</span>
+                    </div>
+                    <a href="demo.html" class="bg-gradient-to-r from-blue-600 to-teal-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
+                        Back to Main
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-20 pb-10">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold mb-4">
+                    Interactive 
+                    <span class="bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
+                        Data Visualization
+                    </span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+                    Explore complex datasets through interactive charts, real-time analytics, 
+                    and cutting-edge visualization techniques powered by D3.js and Chart.js.
+                </p>
+                
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-3 justify-center mb-8">
+                    <div class="filter-chip active" onclick="filterData('all')">All Data</div>
+                    <div class="filter-chip" onclick="filterData('revenue')">Revenue</div>
+                    <div class="filter-chip" onclick="filterData('users')">Users</div>
+                    <div class="filter-chip" onclick="filterData('performance')">Performance</div>
+                    <div class="filter-chip" onclick="filterData('growth')">Growth</div>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="grid md:grid-cols-4 gap-6 mb-8">
+                <div class="glass-card metric-card text-center">
+                    <div class="text-3xl font-bold text-slate-400 mb-2" id="metric-revenue">€127.5K</div>
+                    <div class="text-sm text-gray-400 mb-2">Monthly Revenue</div>
+                    <div class="text-emerald-500 text-sm">↗ +12.5%</div>
+                    <div class="loading-bar mt-3"></div>
+                </div>
+                
+                <div class="glass-card metric-card text-center">
+                    <div class="text-3xl font-bold text-blue-400 mb-2" id="metric-users">45.2K</div>
+                    <div class="text-sm text-gray-400 mb-2">Active Users</div>
+                    <div class="text-emerald-500 text-sm">↗ +8.3%</div>
+                    <div class="loading-bar mt-3" style="animation-delay: 0.5s;"></div>
+                </div>
+                
+                <div class="glass-card metric-card text-center">
+                    <div class="text-3xl font-bold text-teal-400 mb-2" id="metric-conversion">3.7%</div>
+                    <div class="text-sm text-gray-400 mb-2">Conversion Rate</div>
+                    <div class="text-red-400 text-sm">↘ -2.1%</div>
+                    <div class="loading-bar mt-3" style="animation-delay: 1s;"></div>
+                </div>
+                
+                <div class="glass-card metric-card text-center">
+                    <div class="text-3xl font-bold text-orange-500 mb-2" id="metric-performance">98.2%</div>
+                    <div class="text-sm text-gray-400 mb-2">Uptime</div>
+                    <div class="text-emerald-500 text-sm">↗ +0.5%</div>
+                    <div class="loading-bar mt-3" style="animation-delay: 1.5s;"></div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                
+                <!-- Revenue Trend Chart -->
+                <div class="glass-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">Revenue Trend</h3>
+                        <button class="export-btn" onclick="exportChart('revenue')">
+                            📊 Export
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                    <div class="chart-legend" id="revenue-legend"></div>
+                </div>
+
+                <!-- User Activity Heatmap -->
+                <div class="glass-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">User Activity Heatmap</h3>
+                        <button class="export-btn" onclick="exportChart('heatmap')">
+                            🔥 Export
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <svg id="heatmapChart" width="100%" height="300"></svg>
+                    </div>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="glass-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">Performance Metrics</h3>
+                        <button class="export-btn" onclick="exportChart('performance')">
+                            ⚡ Export
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Growth Analytics -->
+                <div class="glass-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold">Growth Analytics</h3>
+                        <button class="export-btn" onclick="exportChart('growth')">
+                            📈 Export
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <svg id="growthChart" width="100%" height="300"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Table Section -->
+            <div class="glass-card mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold">Raw Data Explorer</h3>
+                    <div class="flex gap-3">
+                        <input 
+                            type="text" 
+                            id="search-input"
+                            placeholder="Search data..." 
+                            class="search-input"
+                            oninput="searchData(this.value)"
+                        >
+                        <button class="export-btn" onclick="exportData()">
+                            💾 Export CSV
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="data-table">
+                    <table class="w-full text-sm">
+                        <thead class="border-b border-gray-600">
+                            <tr>
+                                <th class="text-left py-2 px-3">Date</th>
+                                <th class="text-left py-2 px-3">Revenue</th>
+                                <th class="text-left py-2 px-3">Users</th>
+                                <th class="text-left py-2 px-3">Conversion</th>
+                                <th class="text-left py-2 px-3">Performance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data-table-body">
+                            <!-- Data rows will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Real-time Data Stream -->
+            <div class="glass-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold">Real-time Data Stream</h3>
+                    <div class="real-time-indicator">
+                        <div class="live-dot"></div>
+                        <span>Updating every 2 seconds</span>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="data-stream glass-card p-4 relative">
+                        <div class="stream-line" style="top: 50%; animation-delay: 0s;"></div>
+                        <div class="text-sm text-gray-400 mb-2">Concurrent Users</div>
+                        <div class="text-2xl font-bold text-blue-400" id="live-users">1,247</div>
+                        <div class="text-xs text-emerald-500 mt-1">+23 in last minute</div>
+                    </div>
+                    
+                    <div class="data-stream glass-card p-4 relative">
+                        <div class="stream-line" style="top: 50%; animation-delay: 1s;"></div>
+                        <div class="text-sm text-gray-400 mb-2">Revenue/Hour</div>
+                        <div class="text-2xl font-bold text-emerald-500" id="live-revenue">€2,847</div>
+                        <div class="text-xs text-emerald-500 mt-1">+€156 this hour</div>
+                    </div>
+                    
+                    <div class="data-stream glass-card p-4 relative">
+                        <div class="stream-line" style="top: 50%; animation-delay: 2s;"></div>
+                        <div class="text-sm text-gray-400 mb-2">Server Load</div>
+                        <div class="text-2xl font-bold text-orange-500" id="live-load">67%</div>
+                        <div class="text-xs text-yellow-500 mt-1">Moderate load</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="tooltip"></div>
+
+    <script>
+        // Sample data
+        const revenueData = [
+            { month: 'Jan', revenue: 85000, users: 12000, conversion: 3.2 },
+            { month: 'Feb', revenue: 92000, users: 15000, conversion: 3.5 },
+            { month: 'Mar', revenue: 88000, users: 13500, conversion: 3.1 },
+            { month: 'Apr', revenue: 105000, users: 18000, conversion: 3.8 },
+            { month: 'May', revenue: 118000, users: 22000, conversion: 4.1 },
+            { month: 'Jun', revenue: 127500, users: 25000, conversion: 3.7 }
+        ];
+
+        const performanceData = [
+            { metric: 'Page Load', value: 98.5, target: 95 },
+            { metric: 'API Response', value: 94.2, target: 90 },
+            { metric: 'Database', value: 96.8, target: 95 },
+            { metric: 'CDN', value: 99.1, target: 98 },
+            { metric: 'Uptime', value: 99.9, target: 99.5 }
+        ];
+
+        // Initialize Charts
+        function initCharts() {
+            createRevenueChart();
+            createHeatmap();
+            createPerformanceChart();
+            createGrowthChart();
+            populateDataTable();
+        }
+
+        // Revenue Trend Chart
+        function createRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: revenueData.map(d => d.month),
+                    datasets: [{
+                        label: 'Revenue (€)',
+                        data: revenueData.map(d => d.revenue),
+                        borderColor: '#34495e',
+                        backgroundColor: 'rgba(52, 73, 94, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Users',
+                        data: revenueData.map(d => d.users),
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            ticks: { color: 'white' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Heatmap Chart
+        function createHeatmap() {
+            const svg = d3.select('#heatmapChart');
+            const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+            const width = 500 - margin.left - margin.right;
+            const height = 260 - margin.bottom - margin.top;
+
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const hours = Array.from({length: 24}, (_, i) => i);
+            
+            const data = [];
+            days.forEach(day => {
+                hours.forEach(hour => {
+                    data.push({
+                        day: day,
+                        hour: hour,
+                        value: Math.random() * 100
+                    });
+                });
+            });
+
+            const xScale = d3.scaleBand()
+                .domain(hours)
+                .range([0, width])
+                .padding(0.1);
+
+            const yScale = d3.scaleBand()
+                .domain(days)
+                .range([0, height])
+                .padding(0.1);
+
+            const colorScale = d3.scaleSequential(d3.interpolateViridis)
+                .domain([0, 100]);
+
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            g.selectAll('.heatmap-cell')
+                .data(data)
+                .enter().append('rect')
+                .attr('class', 'heatmap-cell')
+                .attr('x', d => xScale(d.hour))
+                .attr('y', d => yScale(d.day))
+                .attr('width', xScale.bandwidth())
+                .attr('height', yScale.bandwidth())
+                .attr('fill', d => colorScale(d.value))
+                .on('mouseover', function(event, d) {
+                    showTooltip(event, `${d.day} ${d.hour}:00<br/>Activity: ${d.value.toFixed(1)}%`);
+                })
+                .on('mouseout', hideTooltip);
+
+            // Add axes
+            g.append('g')
+                .attr('class', 'x-axis')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .style('fill', 'white');
+
+            g.append('g')
+                .attr('class', 'y-axis')
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .style('fill', 'white');
+        }
+
+        // Performance Chart
+        function createPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: performanceData.map(d => d.metric),
+                    datasets: [{
+                        label: 'Current',
+                        data: performanceData.map(d => d.value),
+                        borderColor: '#27ae60',
+                        backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Target',
+                        data: performanceData.map(d => d.target),
+                        borderColor: '#34495e',
+                        backgroundColor: 'rgba(52, 73, 94, 0.1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(255,255,255,0.1)' },
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            pointLabels: { color: 'white' },
+                            ticks: { 
+                                color: 'white',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Growth Chart (D3.js)
+        function createGrowthChart() {
+            const svg = d3.select('#growthChart');
+            const margin = { top: 20, right: 20, bottom: 40, left: 60 };
+            const width = 500 - margin.left - margin.right;
+            const height = 260 - margin.bottom - margin.top;
+
+            const data = revenueData.map((d, i) => ({
+                month: d.month,
+                growth: i === 0 ? 0 : ((d.revenue - revenueData[i-1].revenue) / revenueData[i-1].revenue) * 100
+            }));
+
+            const xScale = d3.scaleBand()
+                .domain(data.map(d => d.month))
+                .range([0, width])
+                .padding(0.2);
+
+            const yScale = d3.scaleLinear()
+                .domain(d3.extent(data, d => d.growth))
+                .nice()
+                .range([height, 0]);
+
+            const g = svg.append('g')
+                .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            // Bars
+            g.selectAll('.bar')
+                .data(data)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', d => xScale(d.month))
+                .attr('y', d => d.growth >= 0 ? yScale(d.growth) : yScale(0))
+                .attr('width', xScale.bandwidth())
+                .attr('height', d => Math.abs(yScale(d.growth) - yScale(0)))
+                .attr('fill', d => d.growth >= 0 ? '#27ae60' : '#e74c3c')
+                .on('mouseover', function(event, d) {
+                    showTooltip(event, `${d.month}<br/>Growth: ${d.growth.toFixed(1)}%`);
+                })
+                .on('mouseout', hideTooltip);
+
+            // Axes
+            g.append('g')
+                .attr('transform', `translate(0,${height})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll('text')
+                .style('fill', 'white');
+
+            g.append('g')
+                .call(d3.axisLeft(yScale))
+                .selectAll('text')
+                .style('fill', 'white');
+
+            // Zero line
+            g.append('line')
+                .attr('x1', 0)
+                .attr('x2', width)
+                .attr('y1', yScale(0))
+                .attr('y2', yScale(0))
+                .attr('stroke', 'rgba(255,255,255,0.3)')
+                .attr('stroke-dasharray', '2,2');
+        }
+
+        // Data Table
+        function populateDataTable() {
+            const tbody = document.getElementById('data-table-body');
+            tbody.innerHTML = '';
+
+            revenueData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-b border-gray-700 hover:bg-gray-700/50';
+                tr.innerHTML = `
+                    <td class="py-2 px-3">${row.month} 2024</td>
+                    <td class="py-2 px-3">€${row.revenue.toLocaleString()}</td>
+                    <td class="py-2 px-3">${row.users.toLocaleString()}</td>
+                    <td class="py-2 px-3">${row.conversion}%</td>
+                    <td class="py-2 px-3">${(Math.random() * 10 + 90).toFixed(1)}%</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Tooltip functions
+        function showTooltip(event, content) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = content;
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY - 10 + 'px';
+            tooltip.classList.add('visible');
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('visible');
+        }
+
+        // Filter data
+        function filterData(type) {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Simulate filtering effect
+            console.log('Filtering by:', type);
+        }
+
+        // Search data
+        function searchData(query) {
+            const rows = document.querySelectorAll('#data-table-body tr');
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+            });
+        }
+
+        // Export functions
+        function exportChart(type) {
+            alert(`Exporting ${type} chart as PNG/SVG/PDF...`);
+        }
+
+        function exportData() {
+            alert('Exporting data as CSV file...');
+        }
+
+        // Real-time updates
+        function updateRealTimeData() {
+            const users = document.getElementById('live-users');
+            const revenue = document.getElementById('live-revenue');
+            const load = document.getElementById('live-load');
+
+            users.textContent = (Math.random() * 500 + 1000).toFixed(0);
+            revenue.textContent = '€' + (Math.random() * 1000 + 2000).toFixed(0);
+            load.textContent = (Math.random() * 30 + 50).toFixed(0) + '%';
+        }
+
+        // Update metrics
+        function updateMetrics() {
+            const metrics = ['metric-revenue', 'metric-users', 'metric-conversion', 'metric-performance'];
+            metrics.forEach(id => {
+                const element = document.getElementById(id);
+                const currentValue = parseFloat(element.textContent.replace(/[€%K,]/g, ''));
+                const change = (Math.random() - 0.5) * 2;
+                const newValue = currentValue + change;
+                
+                if (id.includes('revenue')) {
+                    element.textContent = '€' + newValue.toFixed(1) + 'K';
+                } else if (id.includes('users')) {
+                    element.textContent = newValue.toFixed(1) + 'K';
+                } else {
+                    element.textContent = newValue.toFixed(1) + '%';
+                }
+            });
+        }
+
+        // Initialize everything
+        window.addEventListener('load', () => {
+            initCharts();
+            
+            // Start real-time updates
+            setInterval(updateRealTimeData, 2000);
+            setInterval(updateMetrics, 5000);
+        });
+    </script>
+</body>
+</html>

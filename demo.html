@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Zimmer - Full-Stack Developer & AI Innovation Specialist</title>
+    <meta name="description" content="Expert AI & Full-Stack Developer for Automotive & Manufacturing companies. Custom AI solutions, web applications, and data analytics. 50+ projects delivered, €2M+ client revenue generated.">
+    <meta name="keywords" content="AI Development, Full-Stack Developer, Machine Learning, Data Analytics, Automotive AI, Manufacturing Solutions, Python, React, TensorFlow">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Alex Zimmer - AI & Full-Stack Developer for Automotive & Manufacturing">
+    <meta property="og:description" content="Expert AI solutions and development services. Specialized in automotive and manufacturing industries. 50+ successful projects delivered.">
+    <meta property="og:url" content="https://alexzimmer.dev">
+    <meta property="og:image" content="https://alexzimmer.dev/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Alex Zimmer - AI & Full-Stack Developer">
+    <meta name="twitter:description" content="Expert AI solutions for automotive & manufacturing companies. Custom development services.">
+    <meta name="twitter:image" content="https://alexzimmer.dev/twitter-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%234ecdc4' viewBox='0 0 24 24'%3e%3cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3e%3c/svg%3e">
+    
+    <!-- Removed Google Fonts preconnect - using system fonts for better performance -->
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Primary Colors */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #212121;
+            --bg-tertiary: #2a2a2a;
+            --text-primary: #ffffff;
+            --text-secondary: #c4c4c4; /* Improved contrast from #b3b3b3 */
+            --text-tertiary: #9a9a9a; /* Improved contrast from #8a8a8a */
+            
+            /* Mint Palette */
+            --accent-mint: #4ecdc4;
+            --accent-mint-dark: #0f6b63; /* Even darker for better icon contrast - WCAG AA compliance */
+            --accent-mint-light: #6dd5cd;
+            --accent-mint-100: rgba(78, 205, 196, 0.1);
+            --accent-mint-200: rgba(78, 205, 196, 0.2);
+            --accent-mint-300: rgba(78, 205, 196, 0.3);
+            --accent-mint-900: #1a3a37;
+            
+            /* Secondary Color - Gedecktes Warm-Gelb für Harmonie mit Türkis */
+            --accent-gold: #F7C47E; /* +10% Helligkeit für WCAG AA Kontrast */
+            --accent-gold-dark: #F5B362;
+            --accent-gold-light: #F9D099;
+            --accent-gold-100: rgba(245, 179, 98, 0.1);
+            --accent-gold-200: rgba(245, 179, 98, 0.2);
+            --accent-gold-300: rgba(245, 179, 98, 0.3);
+            
+            /* Neutral Grays for better hierarchy */
+            --neutral-100: #f5f5f5;
+            --neutral-200: #e5e5e5;
+            --neutral-300: #d4d4d4;
+            --neutral-400: #a3a3a3;
+            --neutral-500: #737373;
+            --neutral-600: #525252;
+            --neutral-700: #404040;
+            --neutral-800: #262626;
+            --neutral-900: #171717;
+            
+            /* Semantic Colors */
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: var(--accent-mint);
+            
+            /* Effects */
+            --glass-bg: rgba(33, 33, 33, 0.95);
+            --shadow-color: rgba(78, 205, 196, 0.15);
+            --shadow-glow: rgba(78, 205, 196, 0.25);
+            --border-color: rgba(78, 205, 196, 0.2);
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --dark-gradient: linear-gradient(135deg, #1a1a1a 0%, #212121 100%);
+            
+            /* 8px Spacing System */
+            --space-1: 8px;
+            --space-2: 16px;
+            --space-3: 24px;
+            --space-4: 32px;
+            --space-5: 40px;
+            --space-6: 48px;
+            --space-8: 64px;
+            --space-10: 80px;
+            --space-12: 96px;
+            --space-16: 128px;
+            
+            /* Typography Scale */
+            --text-xs: 12px;
+            --text-sm: 14px;
+            --text-base: 16px;
+            --text-lg: 18px;
+            --text-xl: 20px;
+            --text-2xl: 24px;
+            --text-3xl: 30px;
+            --text-4xl: 36px;
+            --text-5xl: 48px;
+            --text-6xl: 60px;
+            --text-7xl: 72px;
+        }
+        
+        /* Enhanced Focus styles for accessibility - WCAG 2.2 compliance */
+        *:focus {
+            outline: 3px solid var(--accent-gold) !important;
+            outline-offset: 2px !important;
+            box-shadow: 0 0 0 6px rgba(245, 179, 98, 0.25) !important;
+            border-radius: 4px;
+        }
+        
+        /* Focus-visible support for modern browsers */
+        *:focus-visible {
+            outline: 3px solid var(--accent-gold) !important;
+            outline-offset: 2px !important;
+            box-shadow: 0 0 0 6px rgba(245, 179, 98, 0.25) !important;
+            border-radius: 4px;
+        }
+        
+        /* Hide focus for mouse users, show for keyboard users */
+        *:focus:not(:focus-visible) {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        /* Ensure focus is always visible for interactive elements */
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus,
+        select:focus,
+        [role="button"]:focus,
+        [role="menuitem"]:focus {
+            outline: 3px solid var(--accent-gold) !important;
+            outline-offset: 2px !important;
+            box-shadow: 0 0 0 6px rgba(245, 179, 98, 0.25) !important;
+            border-radius: 4px;
+        }
+        
+        /* High contrast focus for links in text */
+        p a:focus,
+        li a:focus,
+        .text-content a:focus {
+            background: rgba(245, 179, 98, 0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        
+        /* Skip link for screen readers */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            z-index: 1000;
+            border: 2px solid var(--accent-mint);
+        }
+        
+        .skip-link:focus {
+            top: 6px;
+        }
+        
+        /* Button System - Consistent 8px border-radius */
+        .btn-primary {
+            background: var(--accent-mint);
+            color: var(--bg-primary);
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--text-base);
+            line-height: 1.2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px var(--shadow-color);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-1);
+            min-height: 44px; /* Touch target size */
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-mint-dark);
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 4px 10px var(--shadow-glow);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0) scale(1.01);
+            transition: transform 0.1s ease;
+        }
+        
+        .btn-primary:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-mint);
+            border: 2px solid var(--accent-mint);
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--text-base);
+            line-height: 1.2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-1);
+            min-height: 44px;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--accent-mint);
+            color: var(--bg-primary);
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .btn-secondary:active {
+            transform: translateY(0) scale(1.01);
+            transition: transform 0.1s ease;
+        }
+        
+        .btn-secondary:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+        
+        /* Accent CTA button für kritische Aktionen - Warm-Gelb */
+        .btn-accent {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border: none;
+            padding: var(--space-2) var(--space-3);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--text-base);
+            line-height: 1.2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px var(--accent-gold-100);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-1);
+            min-height: 44px;
+        }
+        
+        .btn-accent:hover {
+            background: var(--accent-gold-dark);
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 4px 10px var(--accent-gold-200);
+        }
+        
+        .btn-accent:focus {
+            outline: 2px solid var(--accent-mint);
+            outline-offset: 2px;
+        }
+        
+        /* Ghost style button für sekundäre CTAs - Erhöhter Kontrast für WCAG AA 3:1 */
+        .btn-ghost {
+            background: transparent;
+            color: var(--accent-gold); /* #F7C47E - bereits hell genug für Kontrast */
+            border: 2px solid var(--accent-gold);
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--text-base);
+            line-height: 1.2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-1);
+            min-height: 44px;
+        }
+        
+        .btn-ghost:hover {
+            background: var(--accent-gold-100);
+            color: var(--accent-gold-dark);
+            border-color: var(--accent-gold-dark);
+            transform: translateY(-1px) scale(1.03);
+        }
+        
+        .btn-ghost:focus {
+            outline: 2px solid var(--accent-mint);
+            outline-offset: 2px;
+        }
+        
+        /* Ghost-Türkis button für Header-CTA (Mikro-CTA) */
+        .btn-ghost-turquoise {
+            background: transparent;
+            color: var(--accent-mint); /* #4ecdc4 - hoher Kontrast auf dunklem Hintergrund */
+            border: 2px solid var(--accent-mint);
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: var(--text-base);
+            line-height: 1.2;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-1);
+            min-height: 44px;
+        }
+        
+        .btn-ghost-turquoise:hover {
+            background: var(--accent-mint-100);
+            color: var(--accent-mint-dark);
+            border-color: var(--accent-mint-dark);
+            transform: translateY(-1px) scale(1.03);
+        }
+        
+        .btn-ghost-turquoise:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+        
+        /* Warm-Gelb Akzente für bessere Farbharmonie */
+        .gold-accent {
+            color: var(--accent-gold);
+        }
+        
+        .gold-bg {
+            background: var(--accent-gold);
+        }
+        
+        .gold-border {
+            border-color: var(--accent-gold);
+        }
+        
+        .gold-glow {
+            box-shadow: 0 0 20px var(--accent-gold-100);
+        }
+        
+        /* Logo trust factor optimization */
+        .logo-container {
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            opacity: 1;
+        }
+        
+        /* Hover-State für Links mit Warm-Gelb */
+        .gold-link {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        
+        .gold-link:hover {
+            color: var(--accent-gold);
+        }
+        
+        /* Improved line-height für bessere Lesbarkeit */
+        .improved-readability {
+            line-height: 1.6;
+        }
+        
+        /* Optimized line-heights for different content types */
+        .hero-text {
+            line-height: 1.4;
+        }
+        
+        .body-text {
+            line-height: 1.7;
+        }
+        
+        .card-text {
+            line-height: 1.6;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-mint-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .neural-bg {
+            background: var(--dark-gradient);
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Respect user's motion preferences - WCAG 2.2 compliance */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            
+            .pulse-subtle,
+            .loading-shimmer,
+            .animate-fade-in-up,
+            .scroll-reveal {
+                animation: none !important;
+            }
+            
+            .card-hover:hover,
+            .btn-primary:hover,
+            .btn-secondary:hover,
+            .btn-accent:hover,
+            .btn-ghost:hover,
+            .btn-ghost-turquoise:hover {
+                transform: none !important;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+        
+        .pulse-subtle {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        .loading-shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--bg-secondary) 0px,
+                var(--accent-mint-100) 40px,
+                var(--bg-secondary) 80px
+            );
+            background-size: 200px;
+            animation: shimmer 1.5s infinite;
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateZ(0);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px var(--shadow-glow);
+        }
+        
+        .premium-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-mint-100), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .premium-hover:hover::before {
+            left: 100%;
+        }
+        
+        .premium-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-glow);
+        }
+        
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .btn-primary {
+            background: var(--accent-mint);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-mint-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px var(--shadow-color);
+        }
+        
+        .dark-card {
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.2s ease;
+        }
+        
+        .dark-card:hover {
+            border-color: var(--accent-mint);
+            box-shadow: 0 4px 16px var(--shadow-color);
+        }
+        
+        .modern-shadow {
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+        
+        .mint-glow {
+            box-shadow: 0 0 20px var(--accent-mint-100);
+        }
+        
+        .mint-text {
+            color: var(--accent-mint);
+        }
+        
+        .mint-text-light {
+            color: var(--accent-mint-light);
+        }
+        
+        .mint-bg-subtle {
+            background-color: var(--accent-mint-900);
+        }
+        
+        .mint-bg-light {
+            background-color: var(--accent-mint-100);
+        }
+        
+        .mint-border {
+            border-color: var(--accent-mint-200);
+        }
+        
+        .text-primary-custom {
+            color: var(--text-primary);
+        }
+        
+        .text-secondary-custom {
+            color: var(--text-secondary);
+        }
+        
+        .text-tertiary-custom {
+            color: var(--text-tertiary);
+        }
+        
+        .bg-primary-custom {
+            background-color: var(--bg-primary);
+        }
+        
+        .bg-secondary-custom {
+            background-color: var(--bg-secondary);
+        }
+        
+        .bg-tertiary-custom {
+            background-color: var(--bg-tertiary);
+        }
+        
+        .border-subtle {
+            border-color: var(--border-subtle);
+        }
+        
+        .tech-badge {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-subtle);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .tech-badge:hover {
+            background: var(--accent-mint-100);
+            border-color: var(--accent-mint-200);
+            color: var(--accent-mint);
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: 0 4px 12px var(--accent-mint-100);
+        }
+    </style>
+    <!-- JSON-LD Schema for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Alex Zimmer",
+        "jobTitle": "Full-Stack Developer & AI Innovation Specialist",
+        "description": "Expert AI & Full-Stack Developer specializing in automotive and manufacturing solutions",
+        "url": "https://alexzimmer.dev",
+        "sameAs": [
+            "https://github.com/alexzimmer",
+            "https://linkedin.com/in/alexzimmer"
+        ],
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Alex Zimmer Development"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Berlin",
+            "addressCountry": "Germany"
+        },
+        "email": "alex@zimmer.dev",
+        "knowsAbout": [
+            "Artificial Intelligence",
+            "Machine Learning",
+            "Full-Stack Development",
+            "Python",
+            "React",
+            "TensorFlow",
+            "Data Analytics",
+            "Automotive Technology"
+        ]
+    }
+    </script>
+</head>
+<body class="font-sans neural-bg text-white">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link" tabindex="1">Zum Hauptinhalt springen</a>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-effect" role="navigation" aria-label="Hauptnavigation">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <div class="text-2xl font-bold text-gradient">
+                    <span class="sr-only">Alex Zimmer - Startseite</span>
+                    Alex Zimmer
+                </div>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-lg text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent-mint" aria-label="Navigation öffnen" aria-expanded="false" aria-controls="mobile-menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <div class="hidden md:flex items-center space-x-8" role="menubar">
+                    <a href="#hero" class="text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint px-3 py-2 rounded" role="menuitem" aria-label="Zur Startseite">Home</a>
+                    <a href="#expertise" class="text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint px-3 py-2 rounded" role="menuitem" aria-label="Über mich">About</a>
+                    <a href="#services" class="text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint px-3 py-2 rounded" role="menuitem" aria-label="Meine Services">Services</a>
+                    <a href="#projects" class="text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint px-3 py-2 rounded" role="menuitem" aria-label="Meine Projekte">Projects</a>
+                    
+                    <!-- Demos Dropdown -->
+                    <div class="relative dropdown-container" role="menuitem" aria-haspopup="true">
+                        <button onclick="toggleDropdown()" class="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint px-3 py-2 rounded" aria-expanded="false" aria-controls="dropdown-menu" aria-label="Demo-Seiten anzeigen">
+                            <span>Demos</span>
+                            <svg class="w-4 h-4 dropdown-arrow transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="dropdown-menu" class="hidden absolute top-full right-0 mt-2 w-56 dark-card py-2 z-50" role="menu" aria-labelledby="demos-button">
+                            <a href="3d-portfolio.html" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint rounded" role="menuitem" aria-label="3D Portfolio Demo ansehen">
+                                <span class="text-lg" aria-hidden="true">🎲</span>
+                                <span class="font-medium">3D Portfolio</span>
+                            </a>
+                            <a href="ai-interface.html" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint rounded" role="menuitem" aria-label="AI Interface Demo ansehen">
+                                <span class="text-lg" aria-hidden="true">🤖</span>
+                                <span class="font-medium">AI Interface</span>
+                            </a>
+                            <a href="immersive-story.html" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint rounded" role="menuitem" aria-label="Immersive Story Demo ansehen">
+                                <span class="text-lg" aria-hidden="true">📖</span>
+                                <span class="font-medium">Immersive Story</span>
+                            </a>
+                            <a href="data-visualization.html" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint rounded" role="menuitem" aria-label="Datenvisualisierung Demo ansehen">
+                                <span class="text-lg" aria-hidden="true">📊</span>
+                                <span class="font-medium">Data Viz</span>
+                            </a>
+                            <a href="experimental-ui.html" class="flex items-center space-x-3 px-4 py-3 text-sm text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent-mint rounded" role="menuitem" aria-label="Experimental UI Demo ansehen">
+                                <span class="text-lg" aria-hidden="true">🎨</span>
+                                <span class="font-medium">Experimental UI</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <a href="#contact" class="btn-ghost-turquoise px-4 py-2 rounded-lg font-medium text-sm" aria-label="Kostenloses Beratungsgespräch buchen">Kontakt</a>
+                </div>
+                
+                <!-- Mobile Menu -->
+                <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-bg-primary border-t border-subtle" role="menu">
+                    <div class="px-6 py-4 space-y-3">
+                        <a href="#hero" class="block text-gray-300 hover:text-white transition-colors py-2" role="menuitem">Home</a>
+                        <a href="#expertise" class="block text-gray-300 hover:text-white transition-colors py-2" role="menuitem">About</a>
+                        <a href="#services" class="block text-gray-300 hover:text-white transition-colors py-2" role="menuitem">Services</a>
+                        <a href="#projects" class="block text-gray-300 hover:text-white transition-colors py-2" role="menuitem">Projects</a>
+                        <div class="py-2">
+                            <p class="text-sm text-gray-400 mb-2">Demos:</p>
+                            <div class="pl-4 space-y-2">
+                                <a href="3d-portfolio.html" class="block text-sm text-gray-300 hover:text-white transition-colors py-1" role="menuitem">3D Portfolio</a>
+                                <a href="ai-interface.html" class="block text-sm text-gray-300 hover:text-white transition-colors py-1" role="menuitem">AI Interface</a>
+                                <a href="immersive-story.html" class="block text-sm text-gray-300 hover:text-white transition-colors py-1" role="menuitem">Immersive Story</a>
+                                <a href="data-visualization.html" class="block text-sm text-gray-300 hover:text-white transition-colors py-1" role="menuitem">Data Viz</a>
+                                <a href="experimental-ui.html" class="block text-sm text-gray-300 hover:text-white transition-colors py-1" role="menuitem">Experimental UI</a>
+                            </div>
+                        </div>
+                        <a href="#contact" class="btn-ghost-turquoise w-full text-center py-3 mt-4" role="menuitem">Kontakt</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main id="main-content">
+        <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden neural-bg" role="banner" aria-labelledby="hero-heading">
+            <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+                <h1 id="hero-heading" class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+                    <span class="text-white">Alex</span> 
+                    <span class="text-gradient">Zimmer</span>
+                </h1>
+                
+                <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-4 text-gray-300">
+                    Turning AI Innovation Into 
+                    <span class="text-gradient">Business Results</span>
+                    <span class="block text-lg mt-2 text-gray-400">for Automotive & Manufacturing Companies</span>
+                </h2>
+                
+                <p class="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto hero-text">
+                    Expert AI & Full-Stack Developer with 8+ years experience.<br class="hidden sm:block">
+                    <span class="block sm:inline">Specialized in automotive & manufacturing solutions</span>
+                    <span class="block sm:inline sm:ml-1">that drive real ROI.</span>
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                    <a href="#projects" class="btn-primary px-8 py-4 rounded-lg font-semibold" aria-label="Meine Projekt-Portfolio ansehen">
+                        See My Work
+                    </a>
+                    <a href="#contact" class="btn-accent px-8 py-4 rounded-lg font-semibold" aria-label="Kostenloses 15-Minuten Beratungsgespräch buchen">
+                        Book Free 15-min Call
+                    </a>
+                </div>
+                
+                <!-- Social Proof Preview -->
+                <div class="mb-12">
+                    <p class="text-sm text-gray-500 mb-4">Trusted by automotive & manufacturing leaders</p>
+                    <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-8">
+                        <!-- Bosch Logo -->
+                        <div class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 logo-container">
+                            <svg class="w-5 sm:w-6 h-5 sm:h-6" viewBox="0 0 24 24" fill="currentColor" aria-label="Bosch logo">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6h-7v1.5h2.25v7h1.5v-7H15V8zm-3.5 2h-2v5h2v-5z" fill="#6b7280"/>
+                            </svg>
+                            <span class="text-xs text-gray-400 font-medium hidden sm:inline">BOSCH</span>
+                            <span class="text-xs text-gray-400 font-medium sm:hidden">B</span>
+                        </div>
+                        <!-- Continental Logo -->
+                        <div class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 logo-container">
+                            <svg class="w-5 sm:w-6 h-5 sm:h-6" viewBox="0 0 24 24" fill="currentColor" aria-label="Continental logo">
+                                <circle cx="12" cy="12" r="10" fill="none" stroke="#6b7280" stroke-width="2"/>
+                                <path d="M8 9.5a3.5 3.5 0 117 0c0 1.5-1 2.5-2 3l2 2.5h-2l-1.5-2h-1l-1.5 2h-2l2-2.5c-1-0.5-2-1.5-2-3z" fill="#6b7280"/>
+                            </svg>
+                            <span class="text-xs text-gray-400 font-medium hidden sm:inline">CONTINENTAL</span>
+                            <span class="text-xs text-gray-400 font-medium sm:hidden">CONT</span>
+                        </div>
+                        <!-- ZF Group Logo -->
+                        <div class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 logo-container">
+                            <svg class="w-5 sm:w-6 h-5 sm:h-6" viewBox="0 0 24 24" fill="currentColor" aria-label="ZF Group logo">
+                                <rect x="2" y="2" width="20" height="20" rx="2" fill="none" stroke="#6b7280" stroke-width="2"/>
+                                <path d="M6 8h4l-4 4h4v2H6v-2l4-4H6V8zM14 8h4v2h-2v6h-2V8z" fill="#6b7280"/>
+                            </svg>
+                            <span class="text-xs text-gray-400 font-medium hidden sm:inline">ZF GROUP</span>
+                            <span class="text-xs text-gray-400 font-medium sm:hidden">ZF</span>
+                        </div>
+                        <!-- Generic Tier-1 -->
+                        <div class="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-800/50 rounded-lg border border-gray-700/50 logo-container">
+                            <div class="w-5 sm:w-6 h-5 sm:h-6 bg-emerald-600 rounded-sm flex items-center justify-center">
+                                <span class="text-white text-xs font-bold">T1</span>
+                            </div>
+                            <span class="text-xs text-gray-400 font-medium hidden sm:inline">TIER-1 SUPPLIERS</span>
+                            <span class="text-xs text-gray-400 font-medium sm:hidden">TIER-1</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 justify-center">
+                    <a href="https://github.com" target="_blank" class="p-3 border-2 border-subtle hover:mint-border rounded-lg transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="GitHub Profil besuchen">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank" class="p-3 border-2 border-subtle hover:mint-border rounded-lg transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="LinkedIn Profil besuchen">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                    <a href="mailto:alex@zimmer.dev" class="p-3 border-2 border-subtle hover:mint-border rounded-lg transition-colors duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="E-Mail senden">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About/Expertise Section -->
+        <section id="expertise" class="py-20" aria-labelledby="about-heading">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 id="about-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+                        About <span class="text-gradient">Me</span>
+                    </h2>
+                    <p class="text-xl text-secondary-custom max-w-3xl mx-auto">
+                        Bridging AI technology and automotive business success
+                    </p>
+                </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                <!-- Left: Photo & Bio -->
+                <div class="space-y-8">
+                    <div class="w-64 h-64 mx-auto lg:mx-0 rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-gray-700 to-gray-800 relative">
+                        <!-- Professional Avatar Design -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-gray-600 to-gray-800"></div>
+                        <div class="relative z-10 flex items-center justify-center h-full">
+                            <!-- Professional Avatar -->
+                            <div class="text-center">
+                                <div class="w-24 h-24 bg-gradient-to-br from-accent-mint to-accent-mint-dark rounded-full flex items-center justify-center mb-4 shadow-lg p-1">
+                                    <div class="w-full h-full bg-gray-800 rounded-full flex items-center justify-center border-2 border-accent-mint-light">
+                                        <svg class="w-14 h-14 text-accent-mint" viewBox="0 0 24 24" fill="currentColor" aria-label="Alex Zimmer professional avatar">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                            <circle cx="12" cy="8" r="2" fill="currentColor"/>
+                                            <path d="M12 14c-2 0-6 1-6 3v1h12v-1c0-2-4-3-6-3z" fill="currentColor"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="text-white">
+                                    <div class="text-lg font-semibold">Alex Zimmer</div>
+                                    <div class="text-sm text-gray-300">AI Developer</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Professional badge -->
+                        <div class="absolute top-4 right-4 bg-emerald-500 rounded-full w-6 h-6 flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-white">
+                            Full-Stack Developer & AI Innovation Specialist
+                        </h3>
+                        
+                        <div class="space-y-4 text-secondary-custom leading-relaxed">
+                            <p>
+                                8+ years in software development, 4+ years in AI specialization.<br>
+                                Focus: Tier-1 automotive suppliers and manufacturing companies.
+                            </p>
+                            
+                            <p>
+                                My approach combines technical depth with business strategy.<br>
+                                I build solutions that optimize processes and scale with growth.
+                            </p>
+                            
+                            <p>
+                                Track record: 50+ projects for automotive leaders.<br>
+                                Results: Millions in cost savings and revenue generation.
+                            </p>
+                        </div>
+
+                        <!-- Key Achievements with better ARIA labels -->
+                        <div class="grid grid-cols-3 gap-6 pt-6 border-t border-subtle" role="region" aria-label="Erfolgskennzahlen">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gradient" aria-label="50 Projekte erfolgreich abgeschlossen">50+</div>
+                                <div class="text-sm text-secondary-custom">Projects<br><span class="text-xs">(2023 client survey)</span></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gradient" aria-label="2 Millionen Euro Umsatz für Kunden generiert">€2M+</div>
+                                <div class="text-sm text-secondary-custom">Revenue Generated<br><span class="text-xs">(documented ROI)</span></div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gradient" aria-label="99 Prozent Kundenzufriedenheit">99%</div>
+                                <div class="text-sm text-secondary-custom">Client Satisfaction<br><span class="text-xs">(NPS Score 2024)</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Skills with improved badges -->
+                <div class="space-y-8">
+                    <h3 class="text-2xl font-bold text-white mb-8">Technical Expertise</h3>
+                    
+                    <!-- Machine Learning -->
+                    <div class="dark-card rounded-xl p-6 card-hover scroll-reveal premium-hover">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 btn-primary rounded-lg text-black">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1M12 7C13.11 7 14 7.9 14 9S13.11 11 12 11 10 10.11 10 9 10.9 7 12 7M18 9C18 13.25 15.24 17 12 17S6 13.25 6 9H8C8 12.32 9.69 15.2 12 15.2S16 12.32 16 9H18Z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-white">Machine Learning</h4>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-badge">Python <span class="text-xs ml-1">Expert</span></span>
+                            <span class="tech-badge">TensorFlow <span class="text-xs ml-1">Advanced</span></span>
+                            <span class="tech-badge">PyTorch <span class="text-xs ml-1">Advanced</span></span>
+                            <span class="tech-badge">Scikit-learn <span class="text-xs ml-1">Expert</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="dark-card rounded-xl p-6 card-hover scroll-reveal premium-hover stagger-1">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 btn-primary rounded-lg text-black">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M16,11V3H8V7H2V21H22V11H16M10,5H14V19H10V5M4,9H8V19H4V9M16,13H20V19H16V13Z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-white">Statistics</h4>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-badge">Statistical Modeling <span class="text-xs ml-1">Expert</span></span>
+                            <span class="tech-badge">Data Analysis <span class="text-xs ml-1">Expert</span></span>
+                            <span class="tech-badge">Power BI <span class="text-xs ml-1">Advanced</span></span>
+                            <span class="tech-badge">Tableau <span class="text-xs ml-1">Intermediate</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Webpage Design -->
+                    <div class="dark-card rounded-xl p-6 card-hover scroll-reveal premium-hover stagger-2">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2 btn-primary rounded-lg text-black">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,2A2,2 0 0,1 14,4C14,4.74 13.6,5.39 13,5.73V7H14A7,7 0 0,1 21,14H22A1,1 0 0,1 23,15V18A1,1 0 0,1 22,19H21V20A2,2 0 0,1 19,22H5A2,2 0 0,1 3,20V19H2A1,1 0 0,1 1,18V15A1,1 0 0,1 2,14H3A7,7 0 0,1 10,7H11V5.73C10.4,5.39 10,4.74 10,4A2,2 0 0,1 12,2M7.5,13A0.5,0.5 0 0,0 7,13.5A0.5,0.5 0 0,0 7.5,14A0.5,0.5 0 0,0 8,13.5A0.5,0.5 0 0,0 7.5,13M16.5,13A0.5,0.5 0 0,0 16,13.5A0.5,0.5 0 0,0 16.5,14A0.5,0.5 0 0,0 17,13.5A0.5,0.5 0 0,0 16.5,13Z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-white">Webpage Design</h4>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-badge">React/Next.js <span class="text-xs ml-1">Expert</span></span>
+                            <span class="tech-badge">TypeScript <span class="text-xs ml-1">Expert</span></span>
+                            <span class="tech-badge">Node.js <span class="text-xs ml-1">Advanced</span></span>
+                            <span class="tech-badge">PostgreSQL <span class="text-xs ml-1">Advanced</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 dark-card" aria-labelledby="services-heading">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 id="services-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+                    How I Can <span class="text-gradient">Help You</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    From AI-powered solutions to full-stack development, I offer comprehensive services 
+                    to accelerate your digital transformation
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <!-- AI Development Service -->
+                <div class="relative dark-card rounded-2xl p-8 shadow-lg card-hover ring-2 mint-border scale-105 mint-glow scroll-reveal premium-hover">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="btn-primary text-black px-4 py-1 rounded-full text-sm font-medium">
+                            Most Popular
+                        </span>
+                    </div>
+
+                    <div class="btn-primary p-4 rounded-xl inline-block text-black mb-6">
+                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-3">AI Development</h3>
+                    <p class="text-gray-300 mb-6 card-text">Custom AI applications that solve real business problems</p>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">LLM Integration & Fine-tuning</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Computer Vision Solutions</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Predictive Analytics</span>
+                        </li>
+                    </ul>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Investment</span>
+                            <span class="font-bold text-white">Ab 15.000 €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Timeline</span>
+                            <span class="font-medium text-gray-300">4-8 Wochen</span>
+                        </div>
+                    </div>
+
+                    <button class="w-full btn-primary py-3 px-4 rounded-lg font-medium hover:shadow-lg transition-all duration-300">
+                        Choose Consultation
+                    </button>
+                </div>
+
+                <!-- Full-Stack Development Service -->
+                <div class="dark-card rounded-2xl p-8 shadow-lg card-hover scroll-reveal premium-hover stagger-1">
+                    <div class="btn-primary p-4 rounded-xl inline-block text-black mb-6">
+                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0L19.2 12l-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-3">Full-Stack Development</h3>
+                    <p class="text-gray-300 mb-6 card-text">Modern web applications built for scale and performance</p>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">React & Next.js Applications</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">API Development (REST/GraphQL)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Database Design & Optimization</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Cloud Deployment</span>
+                        </li>
+                    </ul>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Investment</span>
+                            <span class="font-bold text-white">Ab 8.000 €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Timeline</span>
+                            <span class="font-medium text-gray-300">3-6 Wochen</span>
+                        </div>
+                    </div>
+
+                    <button class="w-full btn-primary py-3 px-4 rounded-lg font-medium hover:shadow-lg transition-all duration-300">
+                        Choose Full-Stack
+                    </button>
+                </div>
+
+                <!-- Data Analytics & Consulting Service -->
+                <div class="dark-card rounded-2xl p-8 shadow-lg card-hover scroll-reveal premium-hover stagger-2">
+                    <div class="btn-primary p-4 rounded-xl inline-block text-black mb-6">
+                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16,11V3H8V7H2V21H22V11H16M10,5H14V19H10V5M4,9H8V19H4V9M16,13H20V19H16V13Z"/>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-3">Data Analytics & Consulting</h3>
+                    <p class="text-gray-300 mb-6 card-text">Transform your data into actionable business insights</p>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Statistical Analysis & Modeling</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Data Visualization Dashboards</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Business Intelligence Solutions</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 mint-text mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span class="text-gray-300 text-sm">Performance Optimization</span>
+                        </li>
+                    </ul>
+
+                    <div class="space-y-4 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Investment</span>
+                            <span class="font-bold text-white">200 €/Std. · ab 5.000 € Projekt</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-400">Timeline</span>
+                            <span class="font-medium text-gray-300">2-4 Wochen</span>
+                        </div>
+                    </div>
+
+                    <button class="w-full btn-primary py-3 px-4 rounded-lg font-medium hover:shadow-lg transition-all duration-300">
+                        Choose Analytics
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 dark-card" aria-labelledby="projects-heading">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 id="projects-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+                    Featured <span class="text-gradient">Projects</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Real-world solutions that delivered measurable results for clients across industries
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-16">
+                <!-- Project Screenshot - SmartInventory AI Dashboard -->
+                <div class="aspect-[4/3] bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-xl scroll-reveal premium-hover relative">
+                    <!-- Mockup Browser Bar -->
+                    <div class="h-8 bg-gray-700 flex items-center px-4 gap-2">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <div class="ml-4 text-xs text-gray-400">smartinventory-dashboard.app</div>
+                    </div>
+                    <!-- Dashboard Content -->
+                    <div class="p-6 h-full bg-gradient-to-br from-slate-50 to-slate-100">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-bold text-gray-800">SmartInventory AI</h2>
+                            <div class="flex gap-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2a1 1 0 0 0-2 0v2H8V2a1 1 0 0 0-2 0v2H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zM4 19V9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/>
+                                    </svg>
+                                </div>
+                                <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- KPI Cards -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4">
+                            <div class="bg-white rounded-lg p-2 sm:p-3 shadow-sm">
+                                <div class="text-lg sm:text-2xl font-bold text-blue-600">€2.4M</div>
+                                <div class="text-xs text-gray-500">Saved Costs</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-2 sm:p-3 shadow-sm">
+                                <div class="text-lg sm:text-2xl font-bold text-emerald-600">94%</div>
+                                <div class="text-xs text-gray-500">Accuracy</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-2 sm:p-3 shadow-sm sm:block hidden">
+                                <div class="text-lg sm:text-2xl font-bold text-purple-600">12K</div>
+                                <div class="text-xs text-gray-500">Items</div>
+                            </div>
+                        </div>
+                        <!-- Chart Area -->
+                        <div class="bg-white rounded-lg p-4 shadow-sm h-32">
+                            <div class="flex items-end justify-between h-full gap-1">
+                                <div class="w-4 bg-blue-400 rounded-t" style="height: 60%"></div>
+                                <div class="w-4 bg-blue-500 rounded-t" style="height: 80%"></div>
+                                <div class="w-4 bg-blue-600 rounded-t" style="height: 90%"></div>
+                                <div class="w-4 bg-emerald-400 rounded-t" style="height: 70%"></div>
+                                <div class="w-4 bg-emerald-500 rounded-t" style="height: 85%"></div>
+                                <div class="w-4 bg-emerald-600 rounded-t" style="height: 95%"></div>
+                                <div class="w-4 bg-purple-400 rounded-t" style="height: 65%"></div>
+                                <div class="w-4 bg-purple-500 rounded-t" style="height: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Live indicator -->
+                    <div class="absolute top-12 right-4 flex items-center gap-2 bg-black/10 backdrop-blur-sm rounded-full px-3 py-1">
+                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                        <span class="text-xs text-gray-600 font-medium">Live AI Processing</span>
+                    </div>
+                </div>
+
+                <!-- Project Details -->
+                <div class="space-y-6 scroll-reveal stagger-1">
+                    <div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-3 py-1 mint-bg-subtle mint-text rounded-full text-sm font-medium">
+                                AI Development
+                            </span>
+                            <span class="px-3 py-1 bg-gray-700 mint-text rounded-full text-sm font-medium">
+                                Live in Production
+                            </span>
+                        </div>
+                        
+                        <h3 class="text-3xl font-bold text-white mb-4">SmartInventory AI</h3>
+                        <p class="text-gray-300 text-lg body-text mb-6">
+                            Predictive inventory management system that reduced client losses by 35% using machine learning algorithms to forecast demand and automate reordering.
+                        </p>
+                    </div>
+
+                    <!-- Results -->
+                    <div>
+                        <h4 class="font-semibold text-white mb-4">Results:</h4>
+                        <div class="grid grid-cols-3 gap-4">
+                            <div class="text-center p-4 dark-card rounded-xl">
+                                <div class="text-2xl font-bold text-gradient">35%</div>
+                                <div class="text-sm text-gray-300">Cost Reduction</div>
+                            </div>
+                            <div class="text-center p-4 dark-card rounded-xl">
+                                <div class="text-2xl font-bold text-gradient">99%</div>
+                                <div class="text-sm text-gray-300">Forecast Accuracy</div>
+                            </div>
+                            <div class="text-center p-4 dark-card rounded-xl">
+                                <div class="text-2xl font-bold text-gradient">€500K</div>
+                                <div class="text-sm text-gray-300">Annual Savings</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technologies -->
+                    <div>
+                        <h4 class="font-semibold text-white mb-3">Technologies:</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">scikit-learn</span>
+                            <span class="tech-badge">React</span>
+                            <span class="tech-badge">PostgreSQL</span>
+                            <span class="tech-badge">AWS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 dark-card" aria-labelledby="contact-heading">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 id="contact-heading" class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+                    Let&apos;s Build Something <span class="text-gradient">Amazing</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Ready to transform your ideas into reality? Let&apos;s discuss your project and explore 
+                    how AI and modern development can accelerate your business growth.
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
+                <!-- Contact Form -->
+                <div class="dark-card rounded-2xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-white mb-6">Start Your Project</h3>
+                    
+                    <form class="space-y-6" role="form" aria-labelledby="contact-form-heading">
+                        <h4 id="contact-form-heading" class="sr-only">Kontaktformular</h4>
+                        
+                        <div class="grid sm:grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="full-name" class="block text-sm font-medium text-secondary-custom mb-2">Full Name *</label>
+                                <input type="text" id="full-name" name="full-name" required class="w-full px-4 py-3 bg-bg-tertiary border border-subtle rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-colors text-text-primary" placeholder="Your name" aria-describedby="name-help">
+                                <div id="name-help" class="sr-only">Bitte geben Sie Ihren vollständigen Namen ein</div>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-secondary-custom mb-2">Email Address *</label>
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-bg-tertiary border border-subtle rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-colors text-text-primary" placeholder="your@email.com" aria-describedby="email-help">
+                                <div id="email-help" class="sr-only">Bitte geben Sie eine gültige E-Mail-Adresse ein</div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="project-type" class="block text-sm font-medium text-secondary-custom mb-2">Project Type</label>
+                            <select id="project-type" name="project-type" class="w-full px-4 py-3 bg-bg-tertiary border border-subtle rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-colors text-text-primary">
+                                <option value="">Select project type...</option>
+                                <option value="ai-development">AI Development</option>
+                                <option value="full-stack">Full-Stack Development</option>
+                                <option value="data-analytics">Data Analytics & Consulting</option>
+                                <option value="consultation">Strategic Consultation</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="project-description" class="block text-sm font-medium text-secondary-custom mb-2">Project Description *</label>
+                            <textarea id="project-description" name="project-description" rows="5" required class="w-full px-4 py-3 bg-bg-tertiary border border-subtle rounded-lg focus:ring-2 focus:ring-accent-mint focus:border-accent-mint transition-colors resize-vertical text-text-primary" placeholder="Tell me about your project, goals, challenges, and any specific requirements..." aria-describedby="description-help"></textarea>
+                            <div id="description-help" class="text-xs text-tertiary-custom mt-1">Beschreiben Sie Ihr Projekt so detailliert wie möglich (min. 50 Zeichen)</div>
+                        </div>
+
+                        <!-- DSGVO Compliance -->
+                        <div class="space-y-3">
+                            <div class="flex items-start gap-3">
+                                <input type="checkbox" id="privacy-consent" name="privacy-consent" required class="mt-1 w-4 h-4 text-accent-mint bg-bg-tertiary border border-subtle rounded focus:ring-2 focus:ring-accent-mint">
+                                <label for="privacy-consent" class="text-sm text-secondary-custom">
+                                    Ich stimme der Verarbeitung meiner Daten gemäß der 
+                                    <a href="#privacy-policy" class="text-accent-mint hover:text-accent-mint-light underline">Datenschutzerklärung</a> zu. *
+                                </label>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <input type="checkbox" id="marketing-consent" name="marketing-consent" class="mt-1 w-4 h-4 text-accent-mint bg-bg-tertiary border border-subtle rounded focus:ring-2 focus:ring-accent-mint">
+                                <label for="marketing-consent" class="text-sm text-secondary-custom">
+                                    Ich möchte gelegentlich über neue Services und Insights informiert werden (optional).
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full btn-primary py-4 px-6 rounded-lg font-semibold transition-all duration-300" aria-describedby="submit-help">
+                            Projektangebot anfordern
+                        </button>
+                        <div id="submit-help" class="text-xs text-center text-tertiary-custom mt-2">
+                            Kostenlose Erstberatung • Antwort innerhalb 24h • Unverbindlich
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="dark-card rounded-2xl p-8 shadow-lg">
+                        <h3 class="text-2xl font-bold text-white mb-6">Get In Touch</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 btn-primary rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white">Email</h4>
+                                    <p class="text-secondary-custom">alex@zimmer.dev</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 btn-primary rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white">Response Time</h4>
+                                    <p class="text-secondary-custom">Within 24 hours</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 btn-primary rounded-lg flex items-center justify-center">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-white">Location</h4>
+                                    <p class="text-secondary-custom">Germany (EU timezone)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary-custom text-white py-16 border-t border-subtle" role="contentinfo" aria-label="Footer">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Main Footer Content -->
+            <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-12">
+                <!-- Company Info -->
+                <div class="md:col-span-1">
+                    <h3 class="text-2xl font-bold text-gradient mb-4">Alex Zimmer</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        AI & Development Solutions
+                    </p>
+                    
+                    <!-- Contact Info -->
+                    <div class="space-y-3 text-sm text-gray-400">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            <span>Berlin, Germany</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <span>alex@zimmer.dev</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 6L12 10.5 8.5 8 12 5.5 15.5 8z"/>
+                            </svg>
+                            <span>Available Mon-Fri, 9am-6pm CET</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                            </svg>
+                            <span>24-hour response guarantee</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Column -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Services</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#services" class="hover:text-white transition-colors">AI Development</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Full-Stack Development</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">Data Analytics</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors">AI Consulting</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Custom Solutions</a></li>
+                    </ul>
+                </div>
+
+                <!-- About Column -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">About</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#projects" class="hover:text-white transition-colors">Portfolio</a></li>
+                        <li><a href="#projects" class="hover:text-white transition-colors">Case Studies</a></li>
+                        <li><a href="#expertise" class="hover:text-white transition-colors">Technical Skills</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Free Consultation</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Download CV</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal & Support Column -->
+                <div>
+                    <h4 class="font-semibold text-white mb-4">Legal & Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Impressum</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact Support</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">GDPR Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Social Media & Quick Contact -->
+            <div class="border-t border-subtle pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                    <!-- Social Media Links -->
+                    <div class="flex gap-4">
+                        <a href="https://github.com" target="_blank" class="p-3 bg-secondary-custom rounded-lg hover:bg-tertiary-custom transition-colors group mint-glow">
+                            <svg class="w-5 h-5 group-hover:mint-text transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" class="p-3 bg-secondary-custom rounded-lg hover:bg-tertiary-custom transition-colors group mint-glow">
+                            <svg class="w-5 h-5 group-hover:mint-text transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        <a href="mailto:alex@zimmer.dev" class="p-3 bg-secondary-custom rounded-lg hover:bg-tertiary-custom transition-colors group mint-glow">
+                            <svg class="w-5 h-5 group-hover:mint-text transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <!-- Quick Contact CTA -->
+                    <div class="text-center md:text-right">
+                        <p class="text-secondary-custom text-sm mb-2">Ready to start your project?</p>
+                        <a href="#contact" class="btn-ghost px-6 py-2 rounded-lg font-medium hover:shadow-lg transition-all duration-300 text-sm" aria-label="Kostenloses Beratungsgespräch buchen">
+                            Book Free Consultation
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-subtle pt-6 mt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p class="text-secondary-custom text-sm">
+                        © <span id="current-year">2024</span> Alex Zimmer. Alle Rechte vorbehalten.
+                    </p>
+                    <p class="text-secondary-custom text-xs">
+                        Built with cutting-edge technology • DSGVO compliant • Secure communications
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // A+ Performance & Accessibility Optimizations
+        
+        // Dynamic copyright year
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearElement = document.getElementById('current-year');
+            if (yearElement) {
+                yearElement.textContent = new Date().getFullYear();
+            }
+        });
+        
+        // Enhanced prefers-reduced-motion support
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        function handleReducedMotion(e) {
+            if (e.matches) {
+                // Disable all animations and transitions for accessibility
+                document.querySelectorAll('.skill-badge, .animate-fade-in-up, .pulse-subtle, .loading-shimmer, .scroll-reveal').forEach(element => {
+                    element.style.animation = 'none !important';
+                    element.style.transition = 'none !important';
+                    element.style.transform = 'none !important';
+                });
+                
+                // Make scroll reveals immediately visible
+                document.querySelectorAll('.scroll-reveal').forEach(element => {
+                    element.classList.add('revealed');
+                    element.style.opacity = '1';
+                });
+            }
+        }
+        
+        // Apply reduced motion preferences immediately and on change
+        handleReducedMotion(prefersReducedMotion);
+        prefersReducedMotion.addListener(handleReducedMotion);
+        
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown-menu');
+            const arrow = document.querySelector('.dropdown-arrow');
+            const button = document.querySelector('[aria-controls="dropdown-menu"]');
+            
+            const isHidden = dropdown.classList.contains('hidden');
+            
+            dropdown.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+            
+            // Update ARIA attributes
+            button.setAttribute('aria-expanded', !isHidden);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdownContainer = document.querySelector('.dropdown-container');
+            const dropdown = document.getElementById('dropdown-menu');
+            const button = document.querySelector('[aria-controls="dropdown-menu"]');
+            
+            if (!dropdownContainer.contains(event.target)) {
+                dropdown.classList.add('hidden');
+                document.querySelector('.dropdown-arrow').classList.remove('rotate-180');
+                button.setAttribute('aria-expanded', 'false');
+            }
+        });
+        
+        // Keyboard navigation for dropdown
+        document.addEventListener('keydown', function(event) {
+            const dropdown = document.getElementById('dropdown-menu');
+            const button = document.querySelector('[aria-controls="dropdown-menu"]');
+            
+            if (event.key === 'Escape' && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+                document.querySelector('.dropdown-arrow').classList.remove('rotate-180');
+                button.setAttribute('aria-expanded', 'false');
+                button.focus();
+            }
+        });
+
+        // Add smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all scroll-reveal elements
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Add premium hover effects to cards
+        document.querySelectorAll('.card-hover').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const isHidden = mobileMenu.classList.contains('hidden');
+            
+            mobileMenu.classList.toggle('hidden');
+            this.setAttribute('aria-expanded', !isHidden);
+        });
+        
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+                document.getElementById('mobile-menu-button').setAttribute('aria-expanded', 'false');
+            });
+        });
+        
+        // Form validation and submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            // Basic validation
+            const name = form.querySelector('#full-name').value.trim();
+            const email = form.querySelector('#email').value.trim();
+            const description = form.querySelector('#project-description').value.trim();
+            const privacyConsent = form.querySelector('#privacy-consent').checked;
+            
+            if (!name || !email || !description || !privacyConsent) {
+                alert('Bitte füllen Sie alle Pflichtfelder aus und stimmen Sie der Datenschutzerklärung zu.');
+                return;
+            }
+            
+            if (description.length < 50) {
+                alert('Bitte beschreiben Sie Ihr Projekt detaillierter (mindestens 50 Zeichen).');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading-shimmer inline-block w-4 h-4 rounded mr-2"></span> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission (replace with actual implementation)
+            setTimeout(() => {
+                alert('Vielen Dank für Ihre Anfrage! Ich melde mich innerhalb von 24 Stunden bei Ihnen.');
+                form.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+        
+        // Add loading states for other buttons
+        document.querySelectorAll('.btn-primary:not(form .btn-primary), .btn-secondary, .btn-ghost').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                if (this.href && this.href.includes('#')) {
+                    return; // Skip for anchor links
+                }
+                
+                const originalText = this.textContent;
+                this.innerHTML = '<span class="loading-shimmer inline-block w-4 h-4 rounded mr-2"></span> Loading...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

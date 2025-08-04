@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Zimmer - The Evolution of Web Development</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary-navy: #1a237e;
+            --primary-blue: #00e5ff;
+            --story-orange: #ff6b35;
+            --story-purple: #6366f1;
+            --story-green: #10b981;
+            --story-pink: #ec4899;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: white;
+        }
+        
+        .story-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+        
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+        
+        .morphing-shape {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .code-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .code-drop {
+            position: absolute;
+            color: var(--primary-blue);
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            opacity: 0.7;
+            animation: codeRain 4s linear infinite;
+        }
+        
+        @keyframes codeRain {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        .timeline-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100vh;
+            background: linear-gradient(to bottom, var(--primary-blue), var(--story-purple), var(--story-pink));
+            transform: scaleY(0);
+            transform-origin: top;
+            z-index: 1000;
+        }
+        
+        .story-nav {
+            position: fixed;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+        
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.5);
+        }
+        
+        .nav-dot:hover::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 150%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 1;
+            pointer-events: none;
+        }
+        
+        .cinematic-text {
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--primary-blue), var(--story-purple), var(--story-pink));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
+            text-align: center;
+            line-height: 1.1;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .tech-orbit {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+        
+        .tech-planet {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .wave-animation {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--story-purple));
+            opacity: 0.3;
+            animation: wave 6s ease-in-out infinite;
+        }
+        
+        @keyframes wave {
+            0%, 100% { clip-path: polygon(0 100%, 100% 100%, 100% 85%, 0 90%); }
+            50% { clip-path: polygon(0 100%, 100% 100%, 100% 90%, 0 85%); }
+        }
+        
+        .particle-field {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-10px) translateX(-5px); }
+            75% { transform: translateY(-15px) translateX(15px); }
+        }
+        
+        .story-year {
+            font-size: 8rem;
+            font-weight: 900;
+            opacity: 0.1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            background: linear-gradient(45deg, var(--story-orange), var(--story-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .interactive-element:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+        
+        .sound-visualizer {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: end;
+            gap: 2px;
+        }
+        
+        .sound-bar {
+            width: 3px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+            animation: soundWave 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes soundWave {
+            0%, 100% { height: 10px; }
+            50% { height: 30px; }
+        }
+        
+        .chapter-indicator {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .chapter-indicator.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50" style="background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px);">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="demo.html" class="text-2xl font-bold text-white hover:text-blue-300 transition-colors">
+                    ← Alex Zimmer
+                </a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <span class="text-white font-medium">📖 Immersive Story</span>
+                    <a href="demo.html" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
+                        Back to Main
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Timeline Progress -->
+    <div class="timeline-progress" id="timeline-progress"></div>
+
+    <!-- Chapter Indicator -->
+    <div class="chapter-indicator" id="chapter-indicator">
+        <div class="text-center">
+            <div class="text-sm text-gray-400">Chapter</div>
+            <div class="text-lg font-bold" id="chapter-title">The Beginning</div>
+        </div>
+    </div>
+
+    <!-- Story Navigation -->
+    <div class="story-nav">
+        <div class="nav-dot active" data-label="The Beginning" onclick="scrollToSection(0)"></div>
+        <div class="nav-dot" data-label="HTML Era" onclick="scrollToSection(1)"></div>
+        <div class="nav-dot" data-label="CSS Revolution" onclick="scrollToSection(2)"></div>
+        <div class="nav-dot" data-label="JavaScript Awakening" onclick="scrollToSection(3)"></div>
+        <div class="nav-dot" data-label="Framework Wars" onclick="scrollToSection(4)"></div>
+        <div class="nav-dot" data-label="Modern Era" onclick="scrollToSection(5)"></div>
+        <div class="nav-dot" data-label="The Future" onclick="scrollToSection(6)"></div>
+    </div>
+
+    <!-- Code Rain Effect -->
+    <div class="code-rain" id="code-rain"></div>
+
+    <!-- Story Sections -->
+    
+    <!-- Section 1: The Beginning -->
+    <section class="story-section" style="background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);" data-chapter="The Beginning">
+        <div class="story-year">1990</div>
+        <div class="particle-field" id="particles-1"></div>
+        
+        <div class="glass-card floating-element">
+            <h1 class="cinematic-text mb-8">The Evolution of Web Development</h1>
+            <p class="text-xl text-gray-300 mb-6 leading-relaxed">
+                Join us on an immersive journey through the history of web development, 
+                from the first HTML pages to today's cutting-edge applications.
+            </p>
+            <div class="sound-visualizer">
+                <div class="sound-bar" style="animation-delay: 0s; height: 15px;"></div>
+                <div class="sound-bar" style="animation-delay: 0.1s; height: 25px;"></div>
+                <div class="sound-bar" style="animation-delay: 0.2s; height: 20px;"></div>
+                <div class="sound-bar" style="animation-delay: 0.3s; height: 30px;"></div>
+                <div class="sound-bar" style="animation-delay: 0.4s; height: 18px;"></div>
+                <div class="sound-bar" style="animation-delay: 0.5s; height: 25px;"></div>
+                <div class="sound-bar" style="animation-delay: 0.6s; height: 22px;"></div>
+            </div>
+        </div>
+        
+        <div class="wave-animation"></div>
+    </section>
+
+    <!-- Section 2: HTML Era -->
+    <section class="story-section" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);" data-chapter="HTML Era">
+        <div class="story-year">1993</div>
+        <div class="particle-field" id="particles-2"></div>
+        
+        <div class="flex flex-col lg:flex-row items-center gap-12 max-w-6xl">
+            <div class="glass-card floating-element">
+                <h2 class="text-5xl font-bold mb-6 text-orange-400">The HTML Era</h2>
+                <p class="text-lg text-gray-300 mb-6">
+                    Tim Berners-Lee created the first web browser and HTML. Simple documents linked together 
+                    created the foundation of what would become the World Wide Web.
+                </p>
+                <div class="interactive-element bg-gray-800 p-4 rounded-lg text-left">
+                    <div class="text-orange-400 font-mono text-sm">&lt;html&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm ml-4">&lt;head&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm ml-8">&lt;title&gt;First Website&lt;/title&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm ml-4">&lt;/head&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm ml-4">&lt;body&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm ml-8">&lt;h1&gt;Hello World&lt;/h1&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm ml-4">&lt;/body&gt;</div>
+                    <div class="text-orange-400 font-mono text-sm">&lt;/html&gt;</div>
+                </div>
+            </div>
+            
+            <div class="tech-orbit floating-element">
+                <div class="tech-planet" style="background: #ff6b35; top: -20px; left: 50%; transform: translateX(-50%);">HTML</div>
+                <div class="tech-planet" style="background: #666; bottom: -20px; left: 50%; transform: translateX(-50%);">Web</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: CSS Revolution -->
+    <section class="story-section" style="background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);" data-chapter="CSS Revolution">
+        <div class="story-year">1996</div>
+        <div class="particle-field" id="particles-3"></div>
+        
+        <div class="max-w-6xl">
+            <div class="glass-card floating-element text-center mb-12">
+                <h2 class="text-5xl font-bold mb-6" style="color: #00e5ff;">The CSS Revolution</h2>
+                <p class="text-lg text-gray-300">
+                    Cascading Style Sheets separated content from presentation, 
+                    enabling beautiful and consistent web design across the internet.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="morphing-shape floating-element" style="background: linear-gradient(45deg, #ff6b35, #ff8e53); animation-delay: 0s;"></div>
+                <div class="morphing-shape floating-element" style="background: linear-gradient(45deg, #00e5ff, #0099cc); animation-delay: 0.5s; border-radius: 20%;"></div>
+                <div class="morphing-shape floating-element" style="background: linear-gradient(45deg, #6366f1, #8b5cf6); animation-delay: 1s; border-radius: 0;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: JavaScript Awakening -->
+    <section class="story-section" style="background: linear-gradient(135deg, #0f3460 0%, #1a0b2e 100%);" data-chapter="JavaScript Awakening">
+        <div class="story-year">1995</div>
+        <div class="particle-field" id="particles-4"></div>
+        
+        <div class="max-w-4xl text-center">
+            <div class="glass-card floating-element">
+                <h2 class="text-5xl font-bold mb-6" style="color: #f7df1e;">JavaScript Awakening</h2>
+                <p class="text-lg text-gray-300 mb-8">
+                    Brendan Eich created JavaScript in just 10 days, bringing interactivity to the web. 
+                    Static pages transformed into dynamic, responsive experiences.
+                </p>
+                
+                <div class="interactive-element bg-gray-900 p-6 rounded-lg text-left max-w-md mx-auto">
+                    <div class="text-yellow-400 font-mono text-sm">function magic() {</div>
+                    <div class="text-yellow-400 font-mono text-sm ml-4">const web = 'static';</div>
+                    <div class="text-yellow-400 font-mono text-sm ml-4">return web + 'interactive';</div>
+                    <div class="text-yellow-400 font-mono text-sm">}</div>
+                    <div class="text-green-400 font-mono text-sm mt-2">// Output: 'staticinteractive'</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Framework Wars -->
+    <section class="story-section" style="background: linear-gradient(135deg, #1a0b2e 0%, #2d1b47 100%);" data-chapter="Framework Wars">
+        <div class="story-year">2010</div>
+        <div class="particle-field" id="particles-5"></div>
+        
+        <div class="max-w-6xl">
+            <div class="text-center mb-16">
+                <h2 class="cinematic-text mb-6" style="color: #ec4899;">The Framework Wars</h2>
+                <p class="text-xl text-gray-300">
+                    jQuery, Angular, React, Vue - The battle for JavaScript supremacy began, 
+                    each bringing unique approaches to building modern web applications.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card floating-element interactive-element hover:bg-blue-600 hover:bg-opacity-20">
+                    <h3 class="text-2xl font-bold text-blue-400 mb-2">jQuery</h3>
+                    <p class="text-sm text-gray-300">Write less, do more</p>
+                </div>
+                <div class="glass-card floating-element interactive-element hover:bg-red-600 hover:bg-opacity-20">
+                    <h3 class="text-2xl font-bold text-red-400 mb-2">Angular</h3>
+                    <p class="text-sm text-gray-300">Superheroic framework</p>
+                </div>
+                <div class="glass-card floating-element interactive-element hover:bg-cyan-600 hover:bg-opacity-20">
+                    <h3 class="text-2xl font-bold text-cyan-400 mb-2">React</h3>
+                    <p class="text-sm text-gray-300">Build user interfaces</p>
+                </div>
+                <div class="glass-card floating-element interactive-element hover:bg-green-600 hover:bg-opacity-20">
+                    <h3 class="text-2xl font-bold text-green-400 mb-2">Vue</h3>
+                    <p class="text-sm text-gray-300">Progressive framework</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Modern Era -->
+    <section class="story-section" style="background: linear-gradient(135deg, #2d1b47 0%, #1a237e 100%);" data-chapter="Modern Era">
+        <div class="story-year">2020</div>
+        <div class="particle-field" id="particles-6"></div>
+        
+        <div class="max-w-4xl text-center">
+            <div class="glass-card floating-element">
+                <h2 class="text-5xl font-bold mb-6" style="color: #10b981;">The Modern Era</h2>
+                <p class="text-lg text-gray-300 mb-8">
+                    WebAssembly, Progressive Web Apps, AI integration, and real-time collaboration. 
+                    The web became a platform for applications that rival native software.
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-4 mt-8">
+                    <div class="interactive-element bg-gradient-to-br from-purple-600 to-pink-600 p-4 rounded-lg">
+                        <div class="text-2xl mb-2">🚀</div>
+                        <div class="font-semibold">PWAs</div>
+                    </div>
+                    <div class="interactive-element bg-gradient-to-br from-blue-600 to-cyan-600 p-4 rounded-lg">
+                        <div class="text-2xl mb-2">⚡</div>
+                        <div class="font-semibold">WebAssembly</div>
+                    </div>
+                    <div class="interactive-element bg-gradient-to-br from-green-600 to-emerald-600 p-4 rounded-lg">
+                        <div class="text-2xl mb-2">🤖</div>
+                        <div class="font-semibold">AI Integration</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: The Future -->
+    <section class="story-section" style="background: linear-gradient(135deg, #1a237e 0%, #000 100%);" data-chapter="The Future">
+        <div class="story-year">2025</div>
+        <div class="particle-field" id="particles-7"></div>
+        
+        <div class="max-w-4xl text-center">
+            <div class="glass-card floating-element">
+                <h2 class="cinematic-text mb-6">The Future Awaits</h2>
+                <p class="text-xl text-gray-300 mb-8">
+                    WebXR, Quantum Computing, Neural Interfaces, and technologies we haven't even imagined yet. 
+                    The web continues to evolve, and we're just getting started.
+                </p>
+                
+                <div class="tech-orbit mx-auto relative">
+                    <div class="tech-planet" style="background: linear-gradient(45deg, #ff6b35, #ff8e53); top: -20px; left: 50%; transform: translateX(-50%);">XR</div>
+                    <div class="tech-planet" style="background: linear-gradient(45deg, #6366f1, #8b5cf6); top: 50%; right: -20px; transform: translateY(-50%);">AI</div>
+                    <div class="tech-planet" style="background: linear-gradient(45deg, #10b981, #34d399); bottom: -20px; left: 50%; transform: translateX(-50%);">⚛️</div>
+                    <div class="tech-planet" style="background: linear-gradient(45deg, #ec4899, #f472b6); top: 50%; left: -20px; transform: translateY(-50%);">🧠</div>
+                </div>
+                
+                <p class="text-lg text-blue-300 mt-8">
+                    Want to be part of this story? Let's build the future together.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize GSAP and ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Code rain effect
+        function createCodeRain() {
+            const codeRain = document.getElementById('code-rain');
+            const codeSnippets = ['&lt;div&gt;', 'function()', '{...}', 'const', 'let', 'var', '=&gt;', 'async', 'await', 'React', 'Vue', 'Angular', 'CSS', 'HTML', 'JS', 'API', 'JSON', 'HTTP', 'PWA'];
+            
+            setInterval(() => {
+                const drop = document.createElement('div');
+                drop.className = 'code-drop';
+                drop.style.left = Math.random() * 100 + '%';
+                drop.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                drop.textContent = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+                codeRain.appendChild(drop);
+                
+                setTimeout(() => {
+                    drop.remove();
+                }, 5000);
+            }, 200);
+        }
+        
+        // Create particles for each section
+        function createParticles(containerId, count = 20) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // Timeline progress
+        function updateTimelineProgress() {
+            const progress = document.getElementById('timeline-progress');
+            const scrolled = window.pageYOffset;
+            const maxHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = scrolled / maxHeight;
+            
+            gsap.set(progress, { scaleY: scrollPercent });
+        }
+        
+        // Update chapter indicator
+        function updateChapterIndicator() {
+            const sections = document.querySelectorAll('.story-section');
+            const indicator = document.getElementById('chapter-indicator');
+            const chapterTitle = document.getElementById('chapter-title');
+            const navDots = document.querySelectorAll('.nav-dot');
+            
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                    const chapter = section.getAttribute('data-chapter');
+                    chapterTitle.textContent = chapter;
+                    indicator.classList.add('visible');
+                    
+                    // Update navigation dots
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    if (navDots[index]) navDots[index].classList.add('active');
+                } else if (rect.top > window.innerHeight) {
+                    indicator.classList.remove('visible');
+                }
+            });
+        }
+        
+        // Scroll to section
+        function scrollToSection(index) {
+            const sections = document.querySelectorAll('.story-section');
+            if (sections[index]) {
+                sections[index].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Initialize animations
+        function initAnimations() {
+            // Animate floating elements on scroll
+            gsap.utils.toArray('.floating-element').forEach((element) => {
+                gsap.fromTo(element, 
+                    { opacity: 0, y: 100 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: element,
+                            start: 'top 80%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+            
+            // Animate morphing shapes
+            gsap.utils.toArray('.morphing-shape').forEach((shape, index) => {
+                gsap.to(shape, {
+                    rotation: 360,
+                    scale: 1.2,
+                    duration: 2,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: 'power2.inOut',
+                    delay: index * 0.5,
+                    scrollTrigger: {
+                        trigger: shape,
+                        start: 'top 80%',
+                        toggleActions: 'play pause resume reverse'
+                    }
+                });
+            });
+            
+            // Parallax effect for particle fields
+            gsap.utils.toArray('.particle-field').forEach((field) => {
+                gsap.to(field, {
+                    y: -100,
+                    scrollTrigger: {
+                        trigger: field,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: true
+                    }
+                });
+            });
+            
+            // Interactive elements hover effects
+            gsap.utils.toArray('.interactive-element').forEach((element) => {
+                element.addEventListener('mouseenter', () => {
+                    gsap.to(element, { scale: 1.05, duration: 0.3 });
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    gsap.to(element, { scale: 1, duration: 0.3 });
+                });
+            });
+        }
+        
+        // Initialize everything
+        function init() {
+            createCodeRain();
+            
+            // Create particles for each section
+            for (let i = 1; i <= 7; i++) {
+                createParticles(`particles-${i}`, 15);
+            }
+            
+            initAnimations();
+            
+            // Scroll event listeners
+            window.addEventListener('scroll', () => {
+                updateTimelineProgress();
+                updateChapterIndicator();
+            });
+            
+            // Initial calls
+            updateTimelineProgress();
+            updateChapterIndicator();
+        }
+        
+        // Start when page loads
+        window.addEventListener('load', init);
+        
+        // Smooth scrolling for navigation dots
+        document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => scrollToSection(index));
+        });
+    </script>
+</body>
+</html>
