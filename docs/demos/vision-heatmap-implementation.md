@@ -27,7 +27,6 @@ npm i @tensorflow/tfjs @tensorflow/tfjs-backend-webgl @tensorflow/tfjs-backend-w
 # File Structure
 src/app/labs/vision-heatmap/page.tsx
 src/app/labs/vision-heatmap/client.tsx
-src/components/labs/VisionHeatmapShell.tsx
 src/lib/ai/tf-init.ts
 src/lib/ai/gradcam.ts
 src/lib/ai/labels.ts
@@ -36,6 +35,9 @@ src/lib/canvas/dpr.ts
 src/lib/canvas/overlay.ts
 src/lib/canvas/colormap.ts
 src/lib/canvas/export.ts
+src/components/labs/VisionHeatmapShell.tsx
+src/components/labs/HeatmapOverlayCanvas.tsx
+src/components/labs/TopKPanel.tsx
 public/imagenet-labels.json
 public/tfjs-wasm/*.wasm
 ```
@@ -50,7 +52,28 @@ public/tfjs-wasm/*.wasm
 - ✅ **CORS-Safe Export:** crossOrigin="anonymous" für PNG-Download
 - ✅ **TFJS-Backends Single-Source:** ausschließlich in src/lib/ai/tf-init.ts importiert & konfiguriert; gradcam.ts importiert nur ensureTFReady() – keine Backend-Seiteneffekte in anderen Dateien
 - 🚀 **Performance Optimizations:** Model-JSON Preload, Upload-Limit 2048px, COOP/COEP für Threaded-SIMD
+
+### **Model Preload (Optional für bessere Performance):**
+```typescript
+// Optional: Preload in src/app/labs/vision-heatmap/layout.tsx oder über next/head
+import Head from 'next/head';
+
+// Entweder als Layout-Component oder per useEffect im Client
+export function ModelPreloadHead() {
+  return (
+    <Head>
+      <link 
+        rel="preload" 
+        as="fetch"
+        href="https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json"
+        crossOrigin="anonymous"
+      />
+    </Head>
+  );
+}
+```
 - 📊 **Monitoring:** Backend-Badge sichtbar, Time-to-First-CAM Metrik, Memory-Budgets
+- 🔒 **COOP/COEP Optional:** Headers für threaded-simd.wasm support (kann Third-Party Embeds brechen)
 
 ---
 
@@ -91,6 +114,12 @@ import { ensureTFReady } from './tf-init';
 
 const DEFAULT_MOBILENET_V1_URL =
   'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json';
+
+// Helper functions (implemented in T1)
+export async function loadSplitModel(url?: string): Promise<GradCamModels>;
+export function preprocessToInput(img: HTMLImageElement): tf.Tensor4D;
+export async function predictLogits(models: GradCamModels, input: tf.Tensor4D): Promise<tf.Tensor2D>;
+export async function warmup(models: GradCamModels): Promise<void>;
 
 /** Grad-CAM mit korrekter Gradienten-Berechnung */
 export async function gradCAM(
@@ -156,28 +185,30 @@ export async function gradCAM(
 }
 ```
 
-### **Canvas System (HiDPI + Overlay)**
+### **DPR System (HiDPI + Alignment)**
 
 ```typescript
-// lib/canvas/overlay.ts - Canvas System with Feature Detection
+// lib/canvas/dpr.ts - HiDPI Canvas Setup and Alignment
 export function setupHiDPICanvas(
   canvas: HTMLCanvasElement,
   cssWidth: number,
   cssHeight: number,
   dpr = window.devicePixelRatio || 1
 ) {
-  canvas.width = Math.max(1, Math.floor(cssWidth * dpr));
-  canvas.height = Math.max(1, Math.floor(cssHeight * dpr));
-  
   // Set CSS dimensions for stable layout
   canvas.style.width = `${cssWidth}px`;
   canvas.style.height = `${cssHeight}px`;
   
-  // Use desynchronized without feature detection - browsers ignore unknown options
+  canvas.width = Math.max(1, Math.floor(cssWidth * dpr));
+  canvas.height = Math.max(1, Math.floor(cssHeight * dpr));
+  
   const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
   if (!ctx) throw new Error('Canvas context not available');
   
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  
   return { ctx, dpr };
 }
 
@@ -207,11 +238,13 @@ export function getDrawRect(
     }
   }
   
-  // Bei cover erfolgt das Cropping am Ziel (negatives dx/dy + Canvas-Clipping)
-  // Source-Cropping ist nicht nötig; Export übernimmt dieselbe Zielgeometrie
+  // Fixed: Round x/y to prevent subpixel halos
+  const x = Math.round((canvasW - w) / 2);
+  const y = Math.round((canvasH - h) / 2);
+  
   return {
-    x: (canvasW - w) / 2,
-    y: (canvasH - h) / 2,
+    x,
+    y,
     w: Math.round(w),
     h: Math.round(h)
   };
@@ -282,27 +315,32 @@ export function formatProb(p: number, digits = 1): string {
 **Ziel:** Labs-Route existiert, Demo wird lazy geladen (kein TFJS im Initial-Load), WASM-Pfade sind korrekt konfiguriert.
 
 **Dateien:**
-- [ ] `app/labs/vision-heatmap/page.tsx`
-- [ ] `components/labs/VisionHeatmapShell.tsx`
-- [ ] `components/utils/useVisible.ts`
+- [ ] `src/app/labs/vision-heatmap/page.tsx` (Server Component - keine Hooks)
+- [ ] `src/app/labs/vision-heatmap/client.tsx` (Client Component mit useVisible)
+- [ ] `src/components/utils/useVisible.ts`
 - [ ] `public/tfjs-wasm/` → `tfjs-backend-wasm.wasm`, `tfjs-backend-wasm-simd.wasm`, `tfjs-backend-wasm-threaded-simd.wasm`
 
 **Schritte:**
 
 1. **useVisible-Hook:**
 ```typescript
-// components/utils/useVisible.ts
+// src/components/utils/useVisible.ts
 import { useEffect, useRef, useState } from 'react';
 
 export function useVisible<T extends HTMLElement>() {
-  const ref = useRef<T|null>(null);
-  const [isVisible, set] = useState(false);
+  const ref = useRef<T | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
     if (!ref.current) return;
-    const io = new IntersectionObserver(([e]) => set(e.isIntersecting), { rootMargin: '200px' });
-    io.observe(ref.current);
-    return () => io.disconnect();
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { rootMargin: '200px' }
+    );
+    
+    observer.observe(ref.current);
+    return () => observer.disconnect();
   }, []);
   
   return { ref, isVisible };
@@ -311,37 +349,54 @@ export function useVisible<T extends HTMLElement>() {
 
 2. **Labs-Seite & Lazy-Import (Server/Client Split):**
 ```typescript
-// app/labs/vision-heatmap/page.tsx (Server Component, keine Hooks)
+// src/app/labs/vision-heatmap/page.tsx (Server Component - keine Hooks erlaubt)
 import dynamic from 'next/dynamic';
 
-const Client = dynamic(() => import('./client'), { ssr: false });
+const VisionHeatmapClient = dynamic(() => import('./client'), { ssr: false });
 
-export default function Page() {
+export default function VisionHeatmapPage() {
   return (
     <main className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-6">Vision Heatmap (Grad-CAM)</h1>
       <p className="text-sm text-muted-foreground mb-8">
         100&nbsp;% on-device – no data leaves your browser
       </p>
-      <Client />
+      <VisionHeatmapClient />
     </main>
   );
 }
 ```
 
 ```typescript
-// app/labs/vision-heatmap/client.tsx ("use client")
+// src/app/labs/vision-heatmap/client.tsx (Client Component mit Hooks)
 'use client';
+
 import { useVisible } from '@/components/utils/useVisible';
 import dynamic from 'next/dynamic';
 
-const VisionHeatmapShell = dynamic(() => import('@/components/labs/VisionHeatmapShell'), { ssr: false });
+const VisionHeatmapShell = dynamic(
+  () => import('@/components/labs/VisionHeatmapShell'),
+  { 
+    ssr: false,
+    loading: () => <div className="opacity-70 animate-pulse">Loading AI engine...</div>
+  }
+);
 
-export default function Client() {
+export default function VisionHeatmapClient() {
   const { ref, isVisible } = useVisible<HTMLDivElement>();
+  
   return (
     <div ref={ref} className="min-h-[50vh]">
-      {isVisible ? <VisionHeatmapShell /> : <div className="opacity-70">Loading on demand…</div>}
+      {isVisible ? (
+        <VisionHeatmapShell />
+      ) : (
+        <div className="flex items-center justify-center h-64 text-muted-foreground">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-current border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+            <p>Loading on demand...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -349,33 +404,46 @@ export default function Client() {
 
 3. **TFJS-Backend Setup (robust):**
    - Assets in `public/tfjs-wasm/` ablegen (drei .wasm-Dateien)
-   - TF-Init Modul (kommt in T1):
+   - TF-Init Modul (bereits in T0 erstellt):
 ```typescript
-// lib/ai/tf-init.ts (einmalig importieren, wenn die Demo geladen wird)
+// src/lib/ai/tf-init.ts (Module-Level Imports für Tree-Shaking Safety)
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-backend-wasm';
 import * as tf from '@tensorflow/tfjs';
 
+// WASM-Pfade einmalig konfigurieren (vor erstem setBackend-Call)
 tf.setWasmPaths('/tfjs-wasm/'); // public/tfjs-wasm/*.wasm
 
 export async function ensureTFReady(prefer: 'webgl' | 'wasm' = 'webgl'): Promise<string> {
   try {
     await tf.setBackend(prefer);
   } catch {
-    /* ignore */
+    // Silently handle backend setup failures
   }
   await tf.ready();
   
+  // Fallback Strategy: WebGL → WASM → whatever is available
   if (prefer === 'webgl' && tf.getBackend() !== 'webgl') {
     try {
       await tf.setBackend('wasm');
       await tf.ready();
     } catch {
-      /* ignore */
+      // Final fallback to any available backend
     }
   }
   
-  return tf.getBackend();
+  const activeBackend = tf.getBackend();
+  console.log(`TensorFlow.js ready with backend: ${activeBackend}`);
+  return activeBackend;
+}
+
+// Backend-Info für UI-Badge
+export function getBackendInfo(): { name: string; isAsync: boolean } {
+  const backend = tf.getBackend();
+  return {
+    name: backend.toUpperCase(),
+    isAsync: ['webgl', 'webgpu'].includes(backend)
+  };
 }
 ```
 
@@ -474,7 +542,7 @@ TECHNISCHE REQUIREMENTS:
 - Warmup einmalig nach Modell-Load für Performance
 
 CODE BASIS:
-- Verwende GradCamModels Type aus gradcam.ts Code-Snippet
+- Verwende GradCamModels Type aus docs/demos/vision-heatmap-implementation.md gradcam.ts Code-Snippet
 - URL: https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_1.0_224/model.json
 - Label-Validation mit Smoke-Test für bekannte Mappings (Index 0, 285, 999)
 
@@ -544,7 +612,7 @@ TECHNISCHE IMPLEMENTATION:
 - ReLU(CAM) → Min-Max → resizeBilinear auf inputSize
 
 CODE BASIS:
-- Verwende die vollständige gradCAM() Implementation aus gradcam.ts Code-Snippet
+- Verwende die vollständige gradCAM() Implementation aus docs/demos/vision-heatmap-implementation.md gradcam.ts Code-Snippet
 - Alle Must-Fix Korrekturen sind bereits integriert
 - tf.tidy() wrapper um alle Hot-Path Operationen
 
@@ -570,15 +638,16 @@ INTEGRATION:
 **Dateien:**
 - [ ] `src/lib/canvas/dpr.ts` (setupHiDPICanvas, getDrawRect)
 - [ ] `src/lib/canvas/colormap.ts` (viridisRGB)
-- [ ] `src/lib/canvas/overlay.ts` (camToImageData, drawOverlayImageData)
-- [ ] `components/labs/HeatmapOverlayCanvas.tsx` (Dual-Canvas)
+- [ ] `src/lib/canvas/overlay.ts` (nur camToImageData - CAM zu ImageData Konversion)
+- [ ] `src/components/labs/HeatmapOverlayCanvas.tsx` (Dual-Canvas mit drawOverlayImageData)
 
 **Schritte:**
 
 1. **Dual-Canvas implementieren** (Base unten, Overlay oben)
 2. **getDrawRect(imgW,imgH,viewW,viewH,mode)** für contain/cover
-3. **camToImageData(cam, dw, dh, alpha)** + **drawOverlayImageData(...)**
-4. **DPR-Änderungen & Resize** abfangen (rAF-debounced)
+3. **camToImageData(cam, dw, dh, alpha)** in overlay.ts (nur CAM→ImageData)
+4. **drawOverlayImageData(...)** direkt in HeatmapOverlayCanvas.tsx
+5. **DPR-Änderungen & Resize** abfangen (rAF-debounced)
 
 **Tests/Checks:**
 - [ ] Querformat/Hochformat: Overlay deckt exakt (kein 1-px-Ghosting)
@@ -596,10 +665,10 @@ INTEGRATION:
 Implementiere T3 des Vision Heatmap Explorers - Canvas-System & Overlay:
 
 AUFGABEN:
-1. Erweitere src/lib/canvas/overlay.ts um setupHiDPICanvas() (bereits vorhanden - verwenden)
+1. Implementiere src/lib/canvas/dpr.ts mit setupHiDPICanvas() und getDrawRect() (Code-Snippets verwenden)
 2. Implementiere src/lib/canvas/colormap.ts mit viridis Colormap für Heatmap-Rendering
-3. Erstelle camToImageData() für CAM → ImageData Konversion mit Alpha-Blending
-4. Implementiere HeatmapOverlayCanvas.tsx mit Dual-Canvas System (Base + Overlay)
+3. Erstelle src/lib/canvas/overlay.ts mit camToImageData() für CAM → ImageData Konversion (nur Datenkonversion)
+4. Implementiere HeatmapOverlayCanvas.tsx mit Dual-Canvas System + drawOverlayImageData() lokal in Component
 5. Integriere getDrawRect() für präzises contain/cover Alignment
 
 TECHNISCHE REQUIREMENTS:
@@ -614,7 +683,7 @@ KRITISCHE FIXES (bereits angewendet):
 - Desynchronized Canvas Context für bessere Performance
 
 CODE BASIS:
-- Verwende setupHiDPICanvas() und getDrawRect() aus overlay.ts Code-Snippets
+- Verwende setupHiDPICanvas() und getDrawRect() aus docs/demos/vision-heatmap-implementation.md dpr.ts Code-Snippets
 - Viridis Colormap: [0,0,0.5] → [1,1,0] für wissenschaftliche Heatmaps
 - ImageData Buffer-Manipulation für Alpha-Blending mit Bild
 
@@ -639,7 +708,7 @@ INTEGRATION:
 
 **Dateien:**
 - [ ] In VisionHeatmapShell.tsx Controls/Panel hinzufügen
-- [ ] `components/labs/TopKPanel.tsx`
+- [ ] `src/components/labs/TopKPanel.tsx`
 
 **Schritte:**
 
@@ -764,7 +833,7 @@ EXPORT FEATURES:
 - Progress-Indication während Export-Vorgang
 
 CODE BASIS:
-- Verwende bestehende getDrawRect() für korrektes Alignment  
+- Verwende bestehende getDrawRect() aus docs/demos/vision-heatmap-implementation.md für korrektes Alignment  
 - Integration mit Canvas-System aus T3
 - Error-Handling konsistent mit Rest der App
 
@@ -804,13 +873,30 @@ INTEGRATION:
 **Fallstricke:**
 - Große Bilder (4000+ px Kantenlänge) → vorverkleinern (max 2048 px lange Kante) für stabilen Speicher
 
+**Optional: COOP/COEP für threaded-simd.wasm:**
+```javascript
+// next.config.js
+module.exports = {
+  async headers() {
+    return [{
+      source: '/:path*',
+      headers: [
+        { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+        { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' }
+      ]
+    }];
+  }
+};
+// Hinweis: Nur aktivieren, wenn threaded-simd nötig ist; kann Third-Party-Embeds brechen.
+```
+
 **Claude Code Prompt:**
 ```
 Implementiere T6 des Vision Heatmap Explorers - Performance & QA:
 
 AUFGABEN:
 1. Implementiere Performance-Budget Monitoring und Validation
-2. Optimiere Async-Pfade: CAM→ImageData mit optional Chunking
+2. Optimiere Async-Pfade: CAM→ImageData mit optional Chunking (bei UI-Stottern CAM→ImageData in Worker verlagern - Comlink)
 3. Integriere Memory-Monitoring mit Heap-Snapshot Vergleichen
 4. Implementiere Backend-Badge UI für aktives TensorFlow.js Backend
 5. Führe kompletten Lighthouse- und Cross-Browser-QA durch
@@ -828,7 +914,8 @@ MONITORING IMPLEMENTATION:
 - Bundle-Size Tracking: Initial-JS ≤ 100kB (ohne TFJS)
 
 BACKEND-ANZEIGE:
-- UI-Badge zeigt aktives Backend: "WebGL" / "WASM" / "CPU"
+- UI-Badge zeigt aktives Backend: "WebGL" / "WASM" / "CPU" (in VisionHeatmapShell rechts oben)
+- Wert aus tf.getBackend() nach ensureTFReady() call
 - Performance-Hints basierend auf Backend: WebGL-Optimierungen vs WASM-Fallback
 - Backend-Switch UI für Debug/Development
 - Error-Recovery bei Backend-Failures
@@ -961,9 +1048,11 @@ CONTENT-STRATEGIE:
 - [ ] Bild laden → Top-K anzeigen → Klasse wählen → Heatmap Overlay erscheint → PNG exportierbar
 
 **Qualität:**
-- [ ] Lighthouse: Perf ≥ 90, A11y 100
-- [ ] Kein Memory-Leak nach 10 CAM-Runs
-- [ ] FPS-Ziele erfüllt
+- [ ] Lighthouse: Perf ≥ 90, A11y 100, Best Practices ≥ 90
+- [ ] Kein Memory-Leak nach 10 CAM-Runs (stabiler tf.memory().numTensors)
+- [ ] FPS-Ziele erfüllt: 55-60 FPS (M-Chip), ≥30 FPS (Mittelklasse Windows)
+- [ ] **TTFC (Time-to-First-CAM)**: WebGL ≤ 1,0s, WASM ≤ 2,0s (M-Chip) ab Upload bis erste Heatmap
+- [ ] Core Web Vitals: LCP <1.2s, FID <100ms, CLS <0.1
 
 **Technik:**
 - [ ] MobileNet V1 (LayersModel), sauber gesplittet; WASM Fallback konfiguriert; Dispose-Hygiene ok
